@@ -1,39 +1,54 @@
-E-commerce Data Architecture: Refinamento de Modelo Conceitual
-Este repositório apresenta o refinamento de um esquema de banco de dados para sistemas de E-commerce. O objetivo foi transformar um modelo básico em uma estrutura robusta, capaz de suportar operações complexas de checkout, diversidade de perfis de clientes (PF/PJ) e rastreabilidade logística avançada.
+Advanced E-Commerce Data Architecture: Refinamento de Modelo e Persistência
+Este repositório apresenta o refinamento estratégico de um ecossistema de dados para E-commerce. O objetivo central foi a transição de um modelo simplista para uma arquitetura de dados resiliente, projetada para suportar fluxos complexos de checkout, gestão tributária segmentada (PF/PJ) e rastreabilidade logística em tempo real. 
 
-O projeto foca na normalização de dados e na aplicação de regras de negócio essenciais para a integridade de uma plataforma de vendas moderna.
+O foco recai sobre a normalização em 3ª Forma Normal (3NF) e a implementação de regras de integridade que garantem a consistência do dado desde a prospecção até à entrega final ao cliente. 
 
-Decisões de Arquitetura e Melhorias Implementadas
-Para garantir a escalabilidade e a consistência do sistema, as seguintes atualizações foram aplicadas sobre o modelo original:
+Decisões de Arquitetura e Diferenciais Técnicos
+Para assegurar escalabilidade e reduzir a dívida técnica, foram implementadas as seguintes soluções:
 
-1. Especialização de Entidade: Cliente (PF e PJ)
-Abordagem: Implementação de uma estrutura de Generalização e Especialização.
+1. Especialização de Entidades (Inheritance Pattern)
 
-Motivação: Um cliente no sistema pode ser uma Pessoa Física ou Jurídica, mas as informações fiscais (CPF vs CNPJ) são mutuamente exclusivas. Esta estrutura evita a persistência de campos nulos excessivos e garante a integridade referencial por meio de chaves estrangeiras vinculadas à tabela base de Clientes.
+Implementação: Estrutura de Generalização e Especialização para a entidade Cliente. 
 
-2. Gestão de Pagamentos Multimodais
-Flexibilidade: O esquema foi expandido para permitir que um único cliente gerencie diversos métodos de pagamento (Cartões, PIX, Boleto).
 
-Composição de Pedido: Através da tabela associativa Pagamento_Pedido, o sistema permite que um único pedido seja liquidado por um ou mais métodos de pagamento simultaneamente, refletindo o comportamento real de fluxos de checkout de alta complexidade.
+Justificativa Técnica: A separação em Pessoa Física e Pessoa Jurídica elimina a presença de campos nulos (sparse columns) e garante que restrições de integridade, como a validação de CPF e CNPJ, sejam aplicadas de forma isolada e eficiente, otimizando índices e consultas fiscais. 
 
-3. Módulo Logístico e Rastreamento de Entrega
-Entidade Entrega: Criada como uma entidade independente vinculada ao ciclo de vida do Pedido.
+2. Ecossistema de Pagamentos Multimodais
 
-Atributos Técnicos: Inclui controle de Status da Entrega e Código de Rastreio, permitindo o isolamento da lógica de logística em relação à lógica de venda.
+Modularidade: O esquema foi desacoplado para permitir que um único perfil de cliente gira múltiplos métodos de pagamento (Omnichannel). 
 
-Documentação e Entrega
-A modelagem completa foi consolidada em arquivos técnicos anexados a este repositório para facilitar a análise e futura implementação:
 
-Modelo_Ecommerce_Refinado.pdf: Diagrama lógico detalhado contendo todas as entidades, atributos e cardinalidades.
+Complexidade de Checkout: Através da tabela associativa Pagamento_Pedido, o sistema suporta o fracionamento de uma única transação em múltiplos métodos (ex: parte via PIX e parte via Cartão), refletindo o comportamento real de plataformas de alta maturidade. 
 
-schema.dbml: Código fonte da modelagem em formato DBML para portabilidade entre ferramentas de design de banco de dados.
+3. Engine Logística e Rastreabilidade
 
-Stack Técnica Utilizada
-Modelagem Lógica: dbdiagram.io / MySQL Workbench
+Abstração de Domínio: A Entrega é tratada como uma entidade independente, vinculada ao ciclo de vida do Pedido, mas com governança própria. 
 
-Linguagem de Documentação: Markdown
 
-Padronização: Modelo Entidade-Relacionamento (MER)
+Métricas de Desempenho: Inclusão de atributos de rastreio e status evolutivo, permitindo o isolamento da lógica logística e facilitando integrações futuras com APIs de transportadoras via Webhooks. 
+
+Documentação e Artefatos
+A arquitetura está documentada através de artefatos que garantem a portabilidade do projeto:
+
+
+Modelo_Ecommerce_Refinado.pdf: Diagrama lógico detalhado exibindo PKs, FKs e cardinalidades complexas. 
+
+
+schema.dbml: Código-fonte da modelagem para rápida importação em ferramentas de design-first. 
+
+
+queries_scripts.sql: Scripts de criação (DDL) e consultas analíticas para validação de hipóteses de negócio. 
+
+Stack Tecnológica
+
+Modelagem Lógica: dbdiagram.io e MySQL Workbench. 
+
+
+Linguagem de Definição: SQL (ANSI) e DBML. 
+
+
+Documentação: Markdown com foco em documentação técnica profissional. 
 
 Autor
-[Seu Nome Aqui] Analista de Dados / Engenheiro de Dados
+Henrique Vasconcelos Araujo
+DBA
